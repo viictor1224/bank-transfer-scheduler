@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 
 public interface ICalculateFee {
 
-    BigDecimal calculate(TransferInput transferInput, Enum feeType);
-    Enum setFeeType (TransferInput transferInput);
+    BigDecimal calculate(TransferInput transferInput, FeeTypeEnum feeType);
+    FeeTypeEnum setFeeType (TransferInput transferInput);
 
 }

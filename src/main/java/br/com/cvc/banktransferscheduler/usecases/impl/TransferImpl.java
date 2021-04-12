@@ -15,14 +15,17 @@ public class TransferImpl {
     @Autowired
     private ICalculateFee iCalculateFee;
 
-    public TransferEntity converter(TransferInput transferInput) {
+    public TransferEntity buildTransfer(TransferInput transferInput) {
 
-        TransferEntity transferEntity = new TransferEntity.Builder(transferInput.getOriginAccount())
-                .withDestination(transferInput.getDestinationAccount())
-                .atValue(transferInput.getTransferValue())
-                .atSchedulingDate(LocalDate.now())
-                .atTransferDate(transferInput.getTransferDate())
-                .atFeeValue(iCalculateFee.calculate(transferInput, FeeTypeEnum.A))
+        FeeTypeEnum feeType = iCalculateFee.setFeeType(transferInput);
+
+        TransferEntity transferEntity = TransferEntity.builder()
+                .originAccount(transferInput.getDestinationAccount())
+                .destinationAccount(transferInput.getDestinationAccount())
+                .transferValue(transferInput.getTransferValue())
+                .schedulingDate(LocalDate.now())
+                .transferDate(transferInput.getTransferDate())
+                .feeValue(iCalculateFee.calculate(transferInput, feeType)) // FIX IMPLEMENTATION
                 .build();
 
         return transferEntity;

@@ -11,25 +11,30 @@ import java.time.temporal.ChronoUnit;
 @Component
 public class CalculateFee implements ICalculateFee {
 
-    public BigDecimal calculate(TransferInput transferInput, Enum feeType) {
-        // transferDate - schedulingDate
-        LocalDate transferDate = transferInput.getTransferDate();
-        BigDecimal value = transferInput.getTransferValue();
-        Long differenceInDays = ChronoUnit.DAYS.between(transferDate, LocalDate.now());
-//        switch (differenceInDays) {
-//            case 1: return 1;  //Monthly interest rate is annual rate / 12 months.
-//            case 2: return 12*differenceInDays;
-////            case 3: Acima de 10 até 20 dias da data de agendamento 8%
-////Acima de 20 até 30 dias da data de agendamento 6%
-////Acima de 30 até 40 dias da data de agendamento 4%
-////Acima de 40 dias da data de agendamento e valor superior a 100.000 2%
-//            default:
+    public BigDecimal calculate(TransferInput transferInput, FeeTypeEnum feeType) {
+
+        switch (feeType) {
+            case A:
+            case B:
+            case C:
+        }
+
         return new BigDecimal(BigInteger.ZERO);
-//        }
+
     }
 
-    public Enum setFeeType(TransferInput transferInput) {
-        return FeeTypeEnum.A;
+    public FeeTypeEnum setFeeType(TransferInput transferInput) {
+
+        FeeTypeEnum feeType = null;
+        Long bFeeTypeMaxRange = 10L, cFeeTypeMaxRange = 40L;
+        Long differenceInDays = -1*ChronoUnit.DAYS.between(transferInput.getTransferDate(), LocalDate.now());
+
+        if (transferInput.getTransferDate().equals(LocalDate.now()))  feeType = FeeTypeEnum.A;
+        else if (differenceInDays > 0 && differenceInDays<=bFeeTypeMaxRange) feeType = FeeTypeEnum.B;
+        else if (bFeeTypeMaxRange < differenceInDays || differenceInDays <= cFeeTypeMaxRange || cFeeTypeMaxRange < differenceInDays &&
+                transferInput.getTransferValue().compareTo(BigDecimal.valueOf(100000)) == 1) feeType = FeeTypeEnum.C;
+
+        return feeType;
     }
 
 

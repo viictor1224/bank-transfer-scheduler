@@ -32,7 +32,7 @@ public class TransferController {
     @PostMapping
     public ResponseEntity<TransferEntity> schedule(@RequestBody TransferInput transferInput, UriComponentsBuilder uriBuilder) {
 
-        TransferEntity transferEntity = transferImpl.converter(transferInput);
+        TransferEntity transferEntity = transferImpl.buildTransfer(transferInput);
         iTransferRepository.save(transferEntity);
 
         URI uri = uriBuilder.path("/schedules/{id}").buildAndExpand(transferEntity.getId()).toUri();
