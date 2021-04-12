@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>br.com.cvc</groupId>
-	<artifactId>bank-transfer-scheduler</artifactId>
+	<artifactId>bank-transferEntity-scheduler</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>bank-transfer-scheduler</name>
-	<description>Application to schedule bank transfers</description>
+	<name>bank-transferEntity-scheduler</name>
+	<description>Application to schedule bank transferEntities</description>
 	<properties>
 		<java.version>16</java.version>
 	</properties>
