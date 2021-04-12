@@ -1,5 +1,7 @@
 package br.com.cvc.banktransferscheduler.gateway.database.entities;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -20,10 +22,14 @@ public class TransferEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotNull @NotEmpty// use length? notempty?
     private String originAccount;
+    @NotNull @NotEmpty
     private String destinationAccount;
+    @NotNull @NotEmpty
     private BigDecimal transferValue;
     private BigDecimal feeValue;
+    @NotNull @NotEmpty
     private LocalDate transferDate;
     private LocalDate schedulingDate;
 
@@ -82,11 +88,6 @@ public class TransferEntity {
     public void setSchedulingDate(LocalDate schedulingDate) {
         this.schedulingDate = schedulingDate;
     }
-
-
-//    public static List<Transfer> converter (List<TransferInput> transferInputs) {
-//        return transferInputs.stream().map(Transfer::new).collect(Collectors.toList());
-//    }
 
 }
 

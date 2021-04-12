@@ -1,13 +1,20 @@
 package br.com.cvc.banktransferscheduler.entities;
 
+
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class TransferInput {
 
+    @NotNull
     private String originAccount;
+    @NotNull
     private String destinationAccount;
+    @NotNull
     private BigDecimal transferValue;
+    @NotNull
     private LocalDate transferDate;
 
     private TransferInput() {

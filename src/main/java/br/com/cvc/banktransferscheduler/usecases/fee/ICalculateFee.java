@@ -1,6 +1,7 @@
 package br.com.cvc.banktransferscheduler.usecases.fee;
 
 import br.com.cvc.banktransferscheduler.entities.TransferInput;
+import br.com.cvc.banktransferscheduler.usecases.fee.enums.FeeTypeEnum;
 
 import java.math.BigDecimal;
 

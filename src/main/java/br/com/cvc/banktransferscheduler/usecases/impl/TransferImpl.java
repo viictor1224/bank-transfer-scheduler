@@ -2,7 +2,7 @@ package br.com.cvc.banktransferscheduler.usecases.impl;
 
 import br.com.cvc.banktransferscheduler.entities.TransferInput;
 import br.com.cvc.banktransferscheduler.gateway.database.entities.TransferEntity;
-import br.com.cvc.banktransferscheduler.usecases.fee.FeeTypeEnum;
+import br.com.cvc.banktransferscheduler.usecases.fee.enums.FeeTypeEnum;
 import br.com.cvc.banktransferscheduler.usecases.fee.ICalculateFee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ public class TransferImpl {
         FeeTypeEnum feeType = iCalculateFee.setFeeType(transferInput);
 
         TransferEntity transferEntity = TransferEntity.builder()
-                .originAccount(transferInput.getDestinationAccount())
+                .originAccount(transferInput.getOriginAccount())
                 .destinationAccount(transferInput.getDestinationAccount())
                 .transferValue(transferInput.getTransferValue())
                 .schedulingDate(LocalDate.now())
