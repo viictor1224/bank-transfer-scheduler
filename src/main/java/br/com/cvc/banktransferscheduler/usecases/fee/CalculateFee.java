@@ -22,16 +22,14 @@ public class CalculateFee implements ICalculateFee {
                 return BigDecimal.valueOf(3).add(value.multiply(BigDecimal.valueOf(0.03)));
             case B:
                 return BigDecimal.valueOf(12).multiply(BigDecimal.valueOf(differenceInDays));
-            case C:
-                if (10 < differenceInDays && differenceInDays <= 20) {
-                    return BigDecimal.valueOf(0.08).multiply(value);
-                } else if (differenceInDays <= 30) {
-                    return BigDecimal.valueOf(0.06).multiply(value);
-                } else if (differenceInDays <= 40) {
-                    return BigDecimal.valueOf(0.04).multiply(value);
-                } else if (differenceInDays > 40) {
-                    return BigDecimal.valueOf(0.02).multiply(value);
-                }
+            case C1:
+                return BigDecimal.valueOf(0.08).multiply(value);
+            case C2:
+                return BigDecimal.valueOf(0.06).multiply(value);
+            case C3:
+                return BigDecimal.valueOf(0.04).multiply(value);
+            case C4:
+                return BigDecimal.valueOf(0.02).multiply(value);
         }
         return null; // thrown exception?
     }
@@ -39,14 +37,15 @@ public class CalculateFee implements ICalculateFee {
     public FeeTypeEnum setFeeType(TransferRequest transferRequest) {
 
         FeeTypeEnum feeType = null;
-        Long bFeeTypeMaxRange = 10L, cFeeTypeMaxRange = 40L;
         Long differenceInDays = -1 * ChronoUnit.DAYS.between(transferRequest.getTransferDate(), LocalDate.now());
 
         if (transferRequest.getTransferDate().equals(LocalDate.now())) feeType = FeeTypeEnum.A;
-        else if (differenceInDays > 0 && differenceInDays <= bFeeTypeMaxRange) feeType = FeeTypeEnum.B;
-        else if ((bFeeTypeMaxRange < differenceInDays && differenceInDays <= cFeeTypeMaxRange) ||
-                (cFeeTypeMaxRange < differenceInDays && transferRequest.getTransferValue().compareTo(BigDecimal.valueOf(100000)) == 1))
-            feeType = FeeTypeEnum.C;
+        else if (differenceInDays > 0 && differenceInDays <= 10L) feeType = FeeTypeEnum.B;
+        else if (10L < differenceInDays && differenceInDays <= 20L) feeType = FeeTypeEnum.C1;
+        else if (20L < differenceInDays && differenceInDays <= 30L) feeType = FeeTypeEnum.C2;
+        else if (30L < differenceInDays && differenceInDays <= 40L) feeType = FeeTypeEnum.C3;
+        else if (40L < differenceInDays && transferRequest.getTransferValue().compareTo(BigDecimal.valueOf(100000)) == 1)
+            feeType = FeeTypeEnum.C4;
         else
             throw new FeeTypeException(transferRequest.getTransferDate(), transferRequest.getTransferValue());
 

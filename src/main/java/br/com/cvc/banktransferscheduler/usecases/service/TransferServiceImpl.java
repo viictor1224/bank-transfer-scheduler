@@ -1,9 +1,9 @@
 package br.com.cvc.banktransferscheduler.usecases.service;
 
-import br.com.cvc.banktransferscheduler.entities.database.TransferEntity;
 import br.com.cvc.banktransferscheduler.entities.TransferRequest;
 import br.com.cvc.banktransferscheduler.entities.TransferResponse;
 import br.com.cvc.banktransferscheduler.entities.database.ITransferRepository;
+import br.com.cvc.banktransferscheduler.entities.database.TransferEntity;
 import br.com.cvc.banktransferscheduler.usecases.fee.ICalculateFee;
 import br.com.cvc.banktransferscheduler.usecases.fee.enums.FeeTypeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +35,7 @@ public class TransferServiceImpl implements ITransferService {
                 .schedulingDate(LocalDate.now())
                 .transferDate(transferRequest.getTransferDate())
                 .feeValue(iCalculateFee.calculate(transferRequest, feeType).setScale(2, RoundingMode.DOWN))
+                .feeType(feeType)
                 .build();
         return new TransferResponse(iTransferRepository.save(transferEntity));
 
@@ -65,6 +66,7 @@ public class TransferServiceImpl implements ITransferService {
         transferEntity.setSchedulingDate(LocalDate.now());
         transferEntity.setTransferDate(transferRequest.getTransferDate());
         transferEntity.setFeeValue(iCalculateFee.calculate(transferRequest, feeType).setScale(2, RoundingMode.DOWN));
+        transferEntity.setFeeType(feeType);
 
         return new TransferResponse(iTransferRepository.save(transferEntity));
     }
