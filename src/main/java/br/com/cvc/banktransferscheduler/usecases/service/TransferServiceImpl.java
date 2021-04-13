@@ -34,11 +34,10 @@ public class TransferServiceImpl implements ITransferService {
                 .transferValue(transferRequest.getTransferValue())
                 .schedulingDate(LocalDate.now())
                 .transferDate(transferRequest.getTransferDate())
-                .feeValue(Fee.calculateFeeValue(transferRequest, feeType).setScale(2, RoundingMode.DOWN))
+                .feeValue(feeType.calculateFeeValue(transferRequest).setScale(2, RoundingMode.DOWN))
                 .feeType(feeType)
                 .build();
         return new TransferResponse(iTransferRepository.save(transferEntity));
-
     }
 
     public Optional<TransferEntity> readTransfer(Long id) {
@@ -65,7 +64,7 @@ public class TransferServiceImpl implements ITransferService {
         transferEntity.setTransferValue(transferRequest.getTransferValue());
         transferEntity.setSchedulingDate(LocalDate.now());
         transferEntity.setTransferDate(transferRequest.getTransferDate());
-        transferEntity.setFeeValue(Fee.calculateFeeValue(transferRequest, feeType).setScale(2, RoundingMode.DOWN));
+        transferEntity.setFeeValue(feeType.calculateFeeValue(transferRequest).setScale(2, RoundingMode.DOWN));
         transferEntity.setFeeType(feeType);
 
         return new TransferResponse(iTransferRepository.save(transferEntity));

@@ -2,11 +2,7 @@ package br.com.cvc.banktransferscheduler.entities;
 
 import br.com.cvc.banktransferscheduler.entities.database.TransferEntity;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
