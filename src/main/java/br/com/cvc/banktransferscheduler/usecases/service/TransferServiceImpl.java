@@ -4,8 +4,8 @@ import br.com.cvc.banktransferscheduler.entities.TransferRequest;
 import br.com.cvc.banktransferscheduler.entities.TransferResponse;
 import br.com.cvc.banktransferscheduler.entities.database.ITransferRepository;
 import br.com.cvc.banktransferscheduler.entities.database.TransferEntity;
-import br.com.cvc.banktransferscheduler.usecases.fee.ICalculateFee;
-import br.com.cvc.banktransferscheduler.usecases.fee.enums.FeeTypeEnum;
+import br.com.cvc.banktransferscheduler.usecases.fee.IFeeType;
+import br.com.cvc.banktransferscheduler.usecases.fee.enums.Fee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,14 +19,14 @@ import java.util.Optional;
 public class TransferServiceImpl implements ITransferService {
 
     @Autowired
-    private ICalculateFee iCalculateFee;
+    private IFeeType iFeeType;
 
     @Autowired
     private ITransferRepository iTransferRepository;
 
     public TransferResponse createTransfer(TransferRequest transferRequest) {
 
-        FeeTypeEnum feeType = iCalculateFee.setFeeType(transferRequest);
+        Fee feeType = iFeeType.setFeeType(transferRequest);
 
         TransferEntity transferEntity = TransferEntity.builder()
                 .originAccount(transferRequest.getOriginAccount())
@@ -34,7 +34,7 @@ public class TransferServiceImpl implements ITransferService {
                 .transferValue(transferRequest.getTransferValue())
                 .schedulingDate(LocalDate.now())
                 .transferDate(transferRequest.getTransferDate())
-                .feeValue(iCalculateFee.calculate(transferRequest, feeType).setScale(2, RoundingMode.DOWN))
+                .feeValue(Fee.calculateFeeValue(transferRequest, feeType).setScale(2, RoundingMode.DOWN))
                 .feeType(feeType)
                 .build();
         return new TransferResponse(iTransferRepository.save(transferEntity));
@@ -57,7 +57,7 @@ public class TransferServiceImpl implements ITransferService {
 
     public TransferResponse updateTransfer(Long id, TransferRequest transferRequest) {
 
-        FeeTypeEnum feeType = iCalculateFee.setFeeType(transferRequest);
+        Fee feeType = iFeeType.setFeeType(transferRequest);
 
         TransferEntity transferEntity = iTransferRepository.getOne(id);
         transferEntity.setOriginAccount(transferRequest.getOriginAccount());
@@ -65,7 +65,7 @@ public class TransferServiceImpl implements ITransferService {
         transferEntity.setTransferValue(transferRequest.getTransferValue());
         transferEntity.setSchedulingDate(LocalDate.now());
         transferEntity.setTransferDate(transferRequest.getTransferDate());
-        transferEntity.setFeeValue(iCalculateFee.calculate(transferRequest, feeType).setScale(2, RoundingMode.DOWN));
+        transferEntity.setFeeValue(Fee.calculateFeeValue(transferRequest, feeType).setScale(2, RoundingMode.DOWN));
         transferEntity.setFeeType(feeType);
 
         return new TransferResponse(iTransferRepository.save(transferEntity));

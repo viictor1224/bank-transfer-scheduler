@@ -1,6 +1,6 @@
 package br.com.cvc.banktransferscheduler.entities.database;
 
-import br.com.cvc.banktransferscheduler.usecases.fee.enums.FeeTypeEnum;
+import br.com.cvc.banktransferscheduler.usecases.fee.enums.Fee;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,7 +30,7 @@ public class TransferEntity {
     private BigDecimal feeValue;
 
     @Enumerated(EnumType.STRING)
-    private FeeTypeEnum feeType;
+    private Fee feeType;
 
     private LocalDate transferDate;
 
