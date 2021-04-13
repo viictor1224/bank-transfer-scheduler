@@ -1,7 +1,5 @@
-package br.com.cvc.banktransferscheduler.gateway.database.entities;
+package br.com.cvc.banktransferscheduler.entities.database;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -22,15 +20,17 @@ public class TransferEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotNull @NotEmpty// use length? notempty?
+
     private String originAccount;
-    @NotNull @NotEmpty
+
     private String destinationAccount;
-    @NotNull @NotEmpty
+
     private BigDecimal transferValue;
+
     private BigDecimal feeValue;
-    @NotNull @NotEmpty
+
     private LocalDate transferDate;
+
     private LocalDate schedulingDate;
 
     public Long getId() {
@@ -65,9 +65,6 @@ public class TransferEntity {
         this.transferValue = transferValue;
     }
 
-    public BigDecimal getFeeValue() {
-        return feeValue;
-    }
 
     public void setTaxValue(BigDecimal feeValue) {
         this.feeValue = feeValue;
@@ -88,6 +85,13 @@ public class TransferEntity {
     public void setSchedulingDate(LocalDate schedulingDate) {
         this.schedulingDate = schedulingDate;
     }
+
+    public void setFeeValue(BigDecimal feeValue) { this.feeValue = feeValue; }
+
+    public BigDecimal getFeeValue() {
+        return feeValue;
+    }
+
 
 }
 

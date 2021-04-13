@@ -1,23 +1,28 @@
 package br.com.cvc.banktransferscheduler.entities;
 
 
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public class TransferInput {
+public class TransferRequest {
 
     @NotNull
+    @Size(max = 6, message = "incorrectly formatted origin account")
+    @Pattern(regexp = "[0-9]+")
     private String originAccount;
     @NotNull
+    @Size(max = 6, message = "incorrectly formatted destination account")
+    @Pattern(regexp = "[0-9]+")
     private String destinationAccount;
     @NotNull
     private BigDecimal transferValue;
     @NotNull
     private LocalDate transferDate;
 
-    private TransferInput() {
+    private TransferRequest() {
     }
 
     public String getOriginAccount() {

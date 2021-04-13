@@ -1,6 +1,7 @@
 package br.com.cvc.banktransferscheduler.usecases.fee;
 
-import br.com.cvc.banktransferscheduler.entities.TransferInput;
+import br.com.cvc.banktransferscheduler.entities.TransferRequest;
+import br.com.cvc.banktransferscheduler.usecases.exception.FeeTypeException;
 import br.com.cvc.banktransferscheduler.usecases.fee.enums.FeeTypeEnum;
 import org.springframework.stereotype.Component;
 
@@ -11,10 +12,10 @@ import java.time.temporal.ChronoUnit;
 @Component
 public class CalculateFee implements ICalculateFee {
 
-    public BigDecimal calculate(TransferInput transferInput, FeeTypeEnum feeType) {
+    public BigDecimal calculate(TransferRequest transferRequest, FeeTypeEnum feeType) {
 
-        Long differenceInDays = -1 * ChronoUnit.DAYS.between(transferInput.getTransferDate(), LocalDate.now());
-        BigDecimal value = transferInput.getTransferValue();
+        Long differenceInDays = -1 * ChronoUnit.DAYS.between(transferRequest.getTransferDate(), LocalDate.now());
+        BigDecimal value = transferRequest.getTransferValue();
 
         switch (feeType) {
             case A:
@@ -35,18 +36,19 @@ public class CalculateFee implements ICalculateFee {
         return null; // thrown exception?
     }
 
-    public FeeTypeEnum setFeeType(TransferInput transferInput) {
+    public FeeTypeEnum setFeeType(TransferRequest transferRequest) {
 
         FeeTypeEnum feeType = null;
         Long bFeeTypeMaxRange = 10L, cFeeTypeMaxRange = 40L;
-        Long differenceInDays = -1 * ChronoUnit.DAYS.between(transferInput.getTransferDate(), LocalDate.now());
+        Long differenceInDays = -1 * ChronoUnit.DAYS.between(transferRequest.getTransferDate(), LocalDate.now());
 
-        if (transferInput.getTransferDate().equals(LocalDate.now())) feeType = FeeTypeEnum.A;
+        if (transferRequest.getTransferDate().equals(LocalDate.now())) feeType = FeeTypeEnum.A;
         else if (differenceInDays > 0 && differenceInDays <= bFeeTypeMaxRange) feeType = FeeTypeEnum.B;
-        else if (bFeeTypeMaxRange < differenceInDays || differenceInDays <= cFeeTypeMaxRange || cFeeTypeMaxRange < differenceInDays &&
-                transferInput.getTransferValue().compareTo(BigDecimal.valueOf(100000)) == 1) feeType = FeeTypeEnum.C;
-
-//        else throw business exception
+        else if ((bFeeTypeMaxRange < differenceInDays && differenceInDays <= cFeeTypeMaxRange) ||
+                (cFeeTypeMaxRange < differenceInDays && transferRequest.getTransferValue().compareTo(BigDecimal.valueOf(100000)) == 1))
+            feeType = FeeTypeEnum.C;
+        else
+            throw new FeeTypeException(transferRequest.getTransferDate(), transferRequest.getTransferValue());
 
         return feeType;
     }

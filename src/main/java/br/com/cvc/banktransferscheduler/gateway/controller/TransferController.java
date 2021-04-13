@@ -1,9 +1,9 @@
 package br.com.cvc.banktransferscheduler.gateway.controller;
 
-import br.com.cvc.banktransferscheduler.entities.TransferInput;
-import br.com.cvc.banktransferscheduler.gateway.database.ITransferRepository;
-import br.com.cvc.banktransferscheduler.gateway.database.entities.TransferEntity;
-import br.com.cvc.banktransferscheduler.usecases.impl.TransferImpl;
+import br.com.cvc.banktransferscheduler.entities.database.TransferEntity;
+import br.com.cvc.banktransferscheduler.entities.TransferRequest;
+import br.com.cvc.banktransferscheduler.entities.TransferResponse;
+import br.com.cvc.banktransferscheduler.usecases.service.ITransferService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,58 +21,51 @@ import java.util.Optional;
 public class TransferController {
 
     @Autowired
-    private ITransferRepository iTransferRepository;
-
-    @Autowired
-    private TransferImpl transferImpl;
-
-    @GetMapping
-    public List<TransferEntity> list() {
-        List<TransferEntity> transferEntities = iTransferRepository.findAll();
-        return transferEntities;
-    }
+    private ITransferService iTransferService;
 
     @PostMapping
-    public ResponseEntity<TransferEntity> schedule(@RequestBody @Valid TransferInput transferInput, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<TransferResponse> schedule(@RequestBody @Valid TransferRequest transferRequest, UriComponentsBuilder uriBuilder) {
 
-        TransferEntity transferEntity = transferImpl.buildTransfer(transferInput);
-        iTransferRepository.save(transferEntity);
+        TransferResponse transferResponse = iTransferService.createTransfer(transferRequest);
 
-        URI uri = uriBuilder.path("/schedules/{id}").buildAndExpand(transferEntity.getId()).toUri();
-        return ResponseEntity.created(uri).body(transferEntity);
+        URI uri = uriBuilder.path("/schedules/{id}").buildAndExpand(transferResponse.getId()).toUri();
+        return ResponseEntity.created(uri).body(transferResponse);
     }
-
 
     @GetMapping("/{id}")
-    public ResponseEntity<TransferEntity> get(@PathVariable Long id) {
-        Optional<TransferEntity> optional = iTransferRepository.findById(id);
-        if (optional.isPresent()) {
-            return ResponseEntity.ok(optional.get());
+    public ResponseEntity<TransferResponse> get(@PathVariable Long id) {
+        Optional<TransferEntity> optional = iTransferService.readTransfer(id);
+        if (!optional.isPresent()) {
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(new TransferResponse(optional.get()));
     }
 
-//    @PutMapping("/{id}")
-//    @Transactional
-//    public ResponseEntity<TransferEntity> update(@PathVariable Long id, @RequestBody @Valid TransferInput transferInput) {
-//        Optional<TransferEntity> optional = iTransferRepository.findById(id);
-//        if (!optional.isPresent()) {
-//            return ResponseEntity.notFound().build();
-//        }
-//        op = transferImpl.buildTransfer(transferInput);
-//        return ResponseEntity.ok(new TopicoDto(topico));
-//
-//    }
-//
-//    @DeleteMapping("/{id}")
-//    @Transactional
-//    public ResponseEntity<?> remover(@PathVariable Long id) {
-//        Optional<Topico> optional = iTopicoRepository.findById(id);
-//        if (optional.isPresent()) {
-//            iTopicoRepository.deleteById(id);
-//            return ResponseEntity.ok().build();
-//        }
-//        return ResponseEntity.notFound().build();
-//    }
 
+    @GetMapping
+    public List<TransferResponse> list() {
+        List<TransferResponse> transferResponses = iTransferService.getAll();
+        return transferResponses;
+    }
+
+    @PutMapping("/{id}")
+    @Transactional
+    public ResponseEntity<TransferResponse> update(@PathVariable Long id, @RequestBody @Valid TransferRequest transferRequest) {
+        Optional<TransferEntity> optional = iTransferService.readTransfer(id);
+        if (!optional.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        TransferResponse transferResponse = iTransferService.updateTransfer(id, transferRequest);
+        return ResponseEntity.ok(transferResponse);
+    }
+
+    @DeleteMapping("/{id}")
+    @Transactional
+    public ResponseEntity<?> remove(@PathVariable Long id) {
+        if (iTransferService.deleteTransfer(id))
+            return ResponseEntity.ok().build();
+        return ResponseEntity.notFound().build();
+    }
 }
+
+
