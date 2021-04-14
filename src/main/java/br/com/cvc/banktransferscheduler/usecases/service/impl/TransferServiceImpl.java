@@ -1,17 +1,17 @@
-package br.com.cvc.banktransferscheduler.usecases.service;
+package br.com.cvc.banktransferscheduler.usecases.service.impl;
 
 import br.com.cvc.banktransferscheduler.entities.TransferRequest;
-import br.com.cvc.banktransferscheduler.entities.TransferResponse;
 import br.com.cvc.banktransferscheduler.entities.database.ITransferRepository;
 import br.com.cvc.banktransferscheduler.entities.database.TransferEntity;
+import br.com.cvc.banktransferscheduler.usecases.fee.IFeeCalculator;
 import br.com.cvc.banktransferscheduler.usecases.fee.IFeeType;
 import br.com.cvc.banktransferscheduler.usecases.fee.enums.Fee;
+import br.com.cvc.banktransferscheduler.usecases.service.ITransferService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,13 +19,13 @@ import java.util.Optional;
 public class TransferServiceImpl implements ITransferService {
 
     @Autowired
-    private IFeeType iFeeType;
-
-    @Autowired
     private ITransferRepository iTransferRepository;
+    @Autowired
+    private IFeeType iFeeType;
+    @Autowired
+    private IFeeCalculator iFeeCalculator;
 
-    public TransferResponse createTransfer(TransferRequest transferRequest) {
-
+    public TransferEntity createTransfer(TransferRequest transferRequest) {
         Fee feeType = iFeeType.setFeeType(transferRequest);
 
         TransferEntity transferEntity = TransferEntity.builder()
@@ -34,28 +34,24 @@ public class TransferServiceImpl implements ITransferService {
                 .transferValue(transferRequest.getTransferValue())
                 .schedulingDate(LocalDate.now())
                 .transferDate(transferRequest.getTransferDate())
-                .feeValue(feeType.calculateFeeValue(transferRequest).setScale(2, RoundingMode.DOWN))
+                .feeValue(iFeeCalculator.calculate(transferRequest, feeType).setScale(2, RoundingMode.DOWN))
                 .feeType(feeType)
                 .build();
-        return new TransferResponse(iTransferRepository.save(transferEntity));
+        return iTransferRepository.save(transferEntity);
     }
 
-    public Optional<TransferEntity> readTransfer(Long id) {
+    public Optional<TransferEntity> getTransfer(Long id) {
         Optional<TransferEntity> optional = iTransferRepository.findById(id);
         return optional;
     }
 
-    public List<TransferResponse> getAll() {
-        List<TransferResponse> transferResponses = new ArrayList<>();
+    public List<TransferEntity> getAll() {
         List<TransferEntity> transferEntities = iTransferRepository.findAll();
-        transferEntities.forEach(ent -> {
-            transferResponses.add(new TransferResponse(ent));
-        });
-        return transferResponses;
+
+        return transferEntities;
     }
 
-    public TransferResponse updateTransfer(Long id, TransferRequest transferRequest) {
-
+    public TransferEntity updateTransfer(Long id, TransferRequest transferRequest) {
         Fee feeType = iFeeType.setFeeType(transferRequest);
 
         TransferEntity transferEntity = iTransferRepository.getOne(id);
@@ -64,10 +60,10 @@ public class TransferServiceImpl implements ITransferService {
         transferEntity.setTransferValue(transferRequest.getTransferValue());
         transferEntity.setSchedulingDate(LocalDate.now());
         transferEntity.setTransferDate(transferRequest.getTransferDate());
-        transferEntity.setFeeValue(feeType.calculateFeeValue(transferRequest).setScale(2, RoundingMode.DOWN));
+        transferEntity.setFeeValue(iFeeCalculator.calculate(transferRequest, feeType).setScale(2, RoundingMode.DOWN));
         transferEntity.setFeeType(feeType);
 
-        return new TransferResponse(iTransferRepository.save(transferEntity));
+        return iTransferRepository.save(transferEntity);
     }
 
     public boolean deleteTransfer(Long id) {

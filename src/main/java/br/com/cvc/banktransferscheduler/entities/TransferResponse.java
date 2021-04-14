@@ -2,11 +2,13 @@ package br.com.cvc.banktransferscheduler.entities;
 
 import br.com.cvc.banktransferscheduler.entities.database.TransferEntity;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Data
+@NoArgsConstructor
 public class TransferResponse {
 
     private Long id;
@@ -24,16 +26,5 @@ public class TransferResponse {
     private LocalDate transferDate;
 
     private LocalDate schedulingDate;
-
-    public TransferResponse(TransferEntity transferEntity) {
-        this.id = transferEntity.getId();
-        this.originAccount = transferEntity.getOriginAccount();
-        this.destinationAccount = transferEntity.getDestinationAccount();
-        this.transferValue = transferEntity.getTransferValue();
-        this.feeValue = transferEntity.getFeeValue();
-        this.feeType = transferEntity.getFeeType();
-        this.transferDate = transferEntity.getTransferDate();
-        this.schedulingDate = transferEntity.getSchedulingDate();
-    }
 
 }

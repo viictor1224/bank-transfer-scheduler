@@ -9,9 +9,9 @@ import java.util.Optional;
 
 public interface ITransferService {
 
-    TransferResponse createTransfer(TransferRequest transferRequest);
-    Optional<TransferEntity> readTransfer(Long id);
-    List<TransferResponse> getAll();
-    TransferResponse updateTransfer(Long id, TransferRequest transferRequest);
+    TransferEntity createTransfer(TransferRequest transferRequest);
+    Optional<TransferEntity> getTransfer(Long id);
+    List<TransferEntity> getAll();
+    TransferEntity updateTransfer(Long id, TransferRequest transferRequest);
     boolean deleteTransfer(Long id);
 }

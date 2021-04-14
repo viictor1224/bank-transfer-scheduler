@@ -1,7 +1,8 @@
-package br.com.cvc.banktransferscheduler.usecases.fee;
+package br.com.cvc.banktransferscheduler.usecases.fee.impl;
 
 import br.com.cvc.banktransferscheduler.entities.TransferRequest;
 import br.com.cvc.banktransferscheduler.usecases.exception.FeeTypeException;
+import br.com.cvc.banktransferscheduler.usecases.fee.IFeeType;
 import br.com.cvc.banktransferscheduler.usecases.fee.enums.Fee;
 import org.springframework.stereotype.Component;
 
