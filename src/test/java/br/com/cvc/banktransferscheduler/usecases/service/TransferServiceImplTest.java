@@ -8,7 +8,6 @@ import br.com.cvc.banktransferscheduler.usecases.fee.IFeeType;
 import br.com.cvc.banktransferscheduler.usecases.fee.enums.Fee;
 import br.com.cvc.banktransferscheduler.usecases.service.impl.TransferServiceImpl;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -38,10 +37,6 @@ public class TransferServiceImplTest {
 
     @Mock
     private IFeeCalculator iFeeCalculator;
-
-    @Before
-    public void setUp() {
-    }
 
     @Test
     public void createTransferTest() {

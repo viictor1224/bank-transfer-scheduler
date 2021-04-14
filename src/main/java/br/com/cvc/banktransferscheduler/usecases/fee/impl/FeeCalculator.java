@@ -6,6 +6,7 @@ import br.com.cvc.banktransferscheduler.usecases.fee.enums.Fee;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
@@ -33,6 +34,6 @@ public class FeeCalculator implements IFeeCalculator {
     }
 
     public BigDecimal applyFee(BigDecimal value, double fee) {
-        return value.multiply(BigDecimal.valueOf(fee));
+        return value.multiply(BigDecimal.valueOf(fee)).setScale(2, RoundingMode.DOWN);
     }
 }

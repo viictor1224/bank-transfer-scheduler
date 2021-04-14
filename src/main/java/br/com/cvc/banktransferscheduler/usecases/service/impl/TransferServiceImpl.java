@@ -10,7 +10,6 @@ import br.com.cvc.banktransferscheduler.usecases.service.ITransferService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -34,7 +33,7 @@ public class TransferServiceImpl implements ITransferService {
                 .transferValue(transferRequest.getTransferValue())
                 .schedulingDate(LocalDate.now())
                 .transferDate(transferRequest.getTransferDate())
-                .feeValue(iFeeCalculator.calculate(transferRequest, feeType).setScale(2, RoundingMode.DOWN))
+                .feeValue(iFeeCalculator.calculate(transferRequest, feeType))
                 .feeType(feeType)
                 .build();
         return iTransferRepository.save(transferEntity);
@@ -60,7 +59,7 @@ public class TransferServiceImpl implements ITransferService {
         transferEntity.setTransferValue(transferRequest.getTransferValue());
         transferEntity.setSchedulingDate(LocalDate.now());
         transferEntity.setTransferDate(transferRequest.getTransferDate());
-        transferEntity.setFeeValue(iFeeCalculator.calculate(transferRequest, feeType).setScale(2, RoundingMode.DOWN));
+        transferEntity.setFeeValue(iFeeCalculator.calculate(transferRequest, feeType));
         transferEntity.setFeeType(feeType);
 
         return iTransferRepository.save(transferEntity);
