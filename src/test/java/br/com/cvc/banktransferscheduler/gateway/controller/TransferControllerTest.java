@@ -95,6 +95,18 @@ public class TransferControllerTest {
                 .andExpect(status().isOk());
     }
 
+
+    @Test
+    public void updateTestNotFound() throws Exception {
+        mvc.perform(MockMvcRequestBuilders
+                .put("/schedules/{id}", 1)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(buildTransferRequest()))
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
     @Test
     public void removeTest() throws Exception {
         doReturn(true).when(iTransferService).deleteTransfer(any(Long.class));
