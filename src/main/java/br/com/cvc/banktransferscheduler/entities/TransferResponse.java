@@ -12,11 +12,11 @@ public class TransferResponse {
 
     private Long id;
 
+    private BigDecimal transferValue;
+
     private String originAccount;
 
     private String destinationAccount;
-
-    private BigDecimal transferValue;
 
     private BigDecimal feeValue;
 
