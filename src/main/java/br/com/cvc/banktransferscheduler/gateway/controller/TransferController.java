@@ -28,15 +28,6 @@ public class TransferController {
     @Autowired
     private ModelMapper modelMapper;
 
-    @PostMapping
-    public ResponseEntity<TransferResponse> schedule(@RequestBody @Valid TransferRequest transferRequest, UriComponentsBuilder uriBuilder) {
-
-        TransferEntity transferEntity = iTransferService.createTransfer(transferRequest);
-
-        URI uri = uriBuilder.path("/schedules/{id}").buildAndExpand(toResponse(transferEntity).getId()).toUri();
-        return ResponseEntity.created(uri).body(toResponse(transferEntity));
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<TransferResponse> get(@PathVariable Long id) {
         Optional<TransferEntity> optional = iTransferService.getTransfer(id);
@@ -46,13 +37,19 @@ public class TransferController {
         return ResponseEntity.ok(toResponse(optional.get()));
     }
 
-
     @GetMapping
     public List<TransferResponse> list() {
         List<TransferEntity> transferEntities = iTransferService.getAll();
         List<TransferResponse> responses = new ArrayList<>();
         transferEntities.forEach(ent -> responses.add(toResponse(ent)));
         return responses;
+    }
+
+    @PostMapping
+    public ResponseEntity<TransferResponse> schedule(@RequestBody @Valid TransferRequest transferRequest, UriComponentsBuilder uriBuilder) {
+        TransferEntity transferEntity = iTransferService.createTransfer(transferRequest);
+        URI uri = uriBuilder.path("/schedules/{id}").buildAndExpand(toResponse(transferEntity).getId()).toUri();
+        return ResponseEntity.created(uri).body(toResponse(transferEntity));
     }
 
     @PutMapping("/{id}")
