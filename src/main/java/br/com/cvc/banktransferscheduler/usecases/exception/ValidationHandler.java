@@ -26,7 +26,7 @@ public class ValidationHandler {
         List<InputError> errors = new ArrayList<>();
         List<FieldError> fieldErrors = exception.getBindingResult().getFieldErrors();
         fieldErrors.forEach(e -> {
-            String message = messageSource.getMessage(e, LocaleContextHolder.getLocale());
+            String message = e.getField() + " " + messageSource.getMessage(e, LocaleContextHolder.getLocale());
             InputError error = new InputError(e.getField(), message);
             errors.add(error);
         });

@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+    bank-transfer-front:
+        container_name: bank-transfer-front
+        image: viictor1224/bank-transfer-front
+        ports:
+            - 4200:4200
+    bank-transfer-scheduler:
+        container_name: bank-transfer-scheduler
+        image: viictor1224/bank-transfer-scheduler
+        ports:
+            - 8080:8080

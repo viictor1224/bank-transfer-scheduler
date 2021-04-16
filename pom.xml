@@ -10,10 +10,10 @@
     </parent>
 
     <groupId>br.com.cvc</groupId>
-    <artifactId>bank-transferEntity-scheduler</artifactId>
+    <artifactId>bank-transfer-scheduler</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>bank-transferEntity-scheduler</name>
-    <description>Application to schedule bank transferEntities</description>
+    <name>bank-transfer-scheduler</name>
+    <description>Application to schedule bank transfer</description>
 
     <properties>
         <java.version>16</java.version>
