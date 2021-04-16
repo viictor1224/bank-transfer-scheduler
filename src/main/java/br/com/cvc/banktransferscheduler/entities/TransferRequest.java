@@ -17,11 +17,11 @@ public class TransferRequest {
     @DecimalMin(value = "0.0", inclusive = false)
     private BigDecimal transferValue;
     @NotNull
-    @Size(min=6, max = 6, message = "incorrectly formatted origin account")
+    @Size(min=6, max = 6, message = "incorrectly formatted")
     @Pattern(regexp = "[0-9]+")
     private String originAccount;
     @NotNull
-    @Size(min=6, max = 6, message = "incorrectly formatted destination account")
+    @Size(min=6, max = 6, message = "incorrectly formatted")
     @Pattern(regexp = "[0-9]+")
     private String destinationAccount;
     @NotNull
