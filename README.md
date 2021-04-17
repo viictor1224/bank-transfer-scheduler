@@ -29,7 +29,7 @@ This project is the backend for an application that schedules transfers and calc
 
 This project was developed in the clean architecture model which helps using the concepts of low coupling and high cohesion.
 
-This backend was built with the Java programming language using the Apache Maven as a dependency manager and H2 embedded database to persist data.
+This backend was built using Java programming language, Apache Maven as a dependency manager and H2 embedded database to persist data.
 
 ### Built With
 
