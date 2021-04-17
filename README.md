@@ -25,7 +25,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-This project is the backend for an application that schedules transfers and calculates their respective fees according to the transfer date and its value (you can find its fronted [here](https://github.com/viictor1224/bank-transfer-front)).
+This project is the backend for an application that schedules transfers and calculates their respective fees according to the transfer date and its value (you can find its front-ed [here](https://github.com/viictor1224/bank-transfer-front)).
 
 This project was developed in the clean architecture model which helps using the concepts of low coupling and high cohesion.
 
@@ -62,7 +62,7 @@ Install Docker your machine to easily run this application.
   docker run -d -p 8080:8080 viictor1224/bank-transfer-scheduler
   ```
   
-* Full Application Deploy (deploying [frontend](https://github.com/viictor1224/bank-transfer-front) for this application):
+* Full Application Deploy (deploying [front-end](https://github.com/viictor1224/bank-transfer-front) for this application):
   ```sh
   docker-compose up
   ```
@@ -76,7 +76,7 @@ You can also use [Swagger](https://swagger.io/) documentation of this applicatio
   ```sh
 http://localhost:8080/swagger-ui.html
   ```
-Using frontend application you can interact with the application using:
+Using front-end application you can interact with the application using:
   ```sh
 http://localhost:4200
   ```
