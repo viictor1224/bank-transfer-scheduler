@@ -1,5 +1,8 @@
 package br.com.cvc.banktransferscheduler.gateway.config;
 
+import br.com.cvc.banktransferscheduler.usecases.fee.enums.Fee;
+import com.fasterxml.classmate.TypeResolver;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -14,6 +17,13 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class SwaggerConfiguration {
 
+    private final TypeResolver typeResolver;
+
+    @Autowired
+    public SwaggerConfiguration(TypeResolver typeResolver) {
+        this.typeResolver = typeResolver;
+    }
+
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
@@ -21,7 +31,8 @@ public class SwaggerConfiguration {
                 .apis(RequestHandlerSelectors.basePackage("br.com.cvc.banktransferscheduler"))
                 .build()
                 .apiInfo(getApiInfo())
-                .host("localhost:8080");
+                .host("localhost:8080")
+                .additionalModels(typeResolver.resolve(Fee.class));
     }
 
     private ApiInfo getApiInfo() {
