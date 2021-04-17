@@ -46,7 +46,7 @@ public class TransferController {
     }
 
     @PostMapping
-    public ResponseEntity<TransferResponse> schedule(@RequestBody @Valid TransferRequest transferRequest, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<TransferResponse> create(@RequestBody @Valid TransferRequest transferRequest, UriComponentsBuilder uriBuilder) {
         TransferEntity transferEntity = iTransferService.createTransfer(transferRequest);
         URI uri = uriBuilder.path("/schedules/{id}").buildAndExpand(toResponse(transferEntity).getId()).toUri();
         return ResponseEntity.created(uri).body(toResponse(transferEntity));

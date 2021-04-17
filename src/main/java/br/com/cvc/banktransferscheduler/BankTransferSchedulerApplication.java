@@ -8,8 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @EnableAutoConfiguration
 public class BankTransferSchedulerApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(BankTransferSchedulerApplication.class, args);
-	}
-
+    public static void main(String[] args) {
+        SpringApplication.run(BankTransferSchedulerApplication.class, args);
+    }
 }

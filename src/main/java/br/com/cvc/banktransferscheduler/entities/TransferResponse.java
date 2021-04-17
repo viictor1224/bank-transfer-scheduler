@@ -1,5 +1,6 @@
 package br.com.cvc.banktransferscheduler.entities;
 
+import br.com.cvc.banktransferscheduler.usecases.fee.enums.Fee;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -20,7 +21,7 @@ public class TransferResponse {
 
     private BigDecimal feeValue;
 
-    private Enum feeType;
+    private Fee feeType;
 
     private LocalDate transferDate;
 
